@@ -54,9 +54,6 @@ const screens = {
 			return;
 
 		this.log("INFO", `Initializing app...`);
-	
-		if (!devices.initialFetched)
-			await devices.update(false);
 
 		websocket.connect();
 		app.screen.activateByHash(this.locationHash);

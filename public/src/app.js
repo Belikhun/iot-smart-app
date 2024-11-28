@@ -24,6 +24,7 @@ const app = {
 	/** @type {?ContextMenu} */
 	currentContextMenu: null,
 
+	/** @type {string} */
 	baseUrl: null,
 
 	initialized: false,
@@ -206,15 +207,6 @@ const app = {
 				color: "accent",
 				disabled: true
 			});
-
-			const updateButtonState = () => {
-				if (this.currentMode === "connect") {
-					this.submitButton.disabled = (!this.serverInput.value);
-					return;
-				}
-
-				this.submitButton.disabled = (!this.usernameInput.value || !this.passwordInput.value);
-			}
 
 			this.serverInput.input.addEventListener("input", () => this.updateButtonState());
 			this.usernameInput.input.addEventListener("input", () => this.updateButtonState());

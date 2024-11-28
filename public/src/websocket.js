@@ -13,11 +13,13 @@ const websocket = {
 	},
 
 	connect() {
-		const protocol = (location.protocol === "https:")
+		const [appProto, host] = app.baseUrl.split("//");
+
+		const protocol = (appProto === "https:")
 			? "wss:"
 			: "ws:";
 
-		this.socket = new WebSocket(`${protocol}//${location.host}/ws/dashboard`);
+		this.socket = new WebSocket(`${protocol}//${host}/ws/dashboard`);
 
 		this.socket.addEventListener("open", (event) => {
 			this.open(event);
@@ -34,7 +36,7 @@ const websocket = {
 
 	/**
 	 * Send command to server.
-	 * 
+	 *
 	 * @param	{string}	command
 	 * @param	{any}		data
 	 * @param	{string}	source
@@ -51,7 +53,7 @@ const websocket = {
 			source,
 			timestamp
 		};
-	
+
 		this.log("INFO", `[@${timestamp}] ${source} -> ${command}`);
 		this.socket.send(JSON.stringify(payload));
 		return this;
@@ -67,8 +69,8 @@ const websocket = {
 
 	/**
 	 * Handle websocket close event
-	 * 
-	 * @param	{CloseEvent}				event 
+	 *
+	 * @param	{CloseEvent}				event
 	 */
 	async close(event) {
 		this.log("INFO", `Kết nối websocket đã bị đóng:`, event);
@@ -83,8 +85,8 @@ const websocket = {
 
 	/**
 	 * Handle websocket message event
-	 * 
-	 * @param	{MessageEvent<string>}		event 
+	 *
+	 * @param	{MessageEvent<string>}		event
 	 */
 	message(event) {
 		const message = JSON.parse(event.data);
@@ -136,7 +138,7 @@ const websocket = {
 
 	/**
 	 * Listen for command event and handle it.
-	 * 
+	 *
 	 * @param {string}							command
 	 * @param {(data: HandlerData) => void}		handler
 	 */

@@ -10,5 +10,11 @@
 		"androidScheme": "http",
 		"allowNavigation": ["*"],
 		"cleartext": true
+	},
+	"plugins": {
+		"Keyboard": {
+			"resize": "body",
+			"resizeOnFullScreen": true
+		}
 	}
 }

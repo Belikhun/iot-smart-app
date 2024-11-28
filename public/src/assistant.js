@@ -52,19 +52,19 @@ const assistant = {
 
 	/** @type {TreeDOM} */
 	button: undefined,
-	
+
 	/** @type {SQButton} */
 	sendButton: undefined,
-	
+
 	/** @type {SQButton} */
 	voiceButton: undefined,
-	
+
 	/** @type {SQButton} */
 	closeButton: undefined,
 
 	/** @type {Scrollable} */
 	scroll: undefined,
-	
+
 	/** @type {HTMLTextAreaElement} */
 	textbox: undefined,
 
@@ -81,7 +81,7 @@ const assistant = {
 	currentUserMessage: undefined,
 
 	scrollDownTask: undefined,
-	
+
 	/** @type {HTMLDivElement} */
 	messageNodes: undefined,
 
@@ -115,7 +115,7 @@ const assistant = {
 		});
 
 		this.welcome = makeTree("div", "welcome-message", {
-			icon: { tag: "img", src: app.url("/public/images/bard-animated.webp") },
+			icon: { tag: "img", src: app.public("/images/bard-animated.webp") },
 			titl: { tag: "div", class: "title", html: "Xin chào! Tôi là <strong>Bụt</strong>, trợ lý ảo nhà thông minh của bạn!" },
 			messages: { tag: "div", class: "message", text: "Tôi có thể cập nhật thông tin hiện tại về ngôi nhà tới bạn, lập lịch hoạt động của các thiết bị và hỗ trợ bạn điều khiển các thiết bị một cách dễ dàng!" }
 		});
@@ -146,7 +146,7 @@ const assistant = {
 		});
 
 		this.button = makeTree("div", "assistant-chat-button", {
-			icon: { tag: "img", src: app.url("/public/images/bard-mono.svg") },
+			icon: { tag: "img", src: app.public("/images/bard-mono.svg") },
 			close: { tag: "icon", icon: "close" }
 		});
 
@@ -205,7 +205,7 @@ const assistant = {
 
 	/**
 	 * Manually request permission to use the microphone
-	 * 
+	 *
 	 * @returns {Promise<true>}
 	 */
 	async requestMicrophone() {
@@ -243,7 +243,7 @@ const assistant = {
 	async initAudio() {
 		if (!await this.requestMicrophone())
 			return false;
-		
+
 		this.player = new WavStreamPlayer({ sampleRate: 24000 });
 		await this.player.connect();
 
@@ -355,7 +355,7 @@ const assistant = {
 			const now = performance.now();
 			const time = (now - start) / 1000;
 			delta = (now - delta) / 1000;
-			
+
 			const bar = document.createElement("span");
 			bar.classList.add("bar");
 			scroller.appendChild(bar);
@@ -390,7 +390,7 @@ const assistant = {
 	assistantStart({ id }) {
 		const message = makeTree("div", ["message", "assistant"], {
 			author: { tag: "div", class: "author", child: {
-				image: { tag: "img", src: app.url("/public/images/bard-thinking.webp") },
+				image: { tag: "img", src: app.public("/images/bard-thinking.webp") },
 				fullname: { tag: "span", class: "name", text: "Trợ lý" }
 			}}
 		});
@@ -496,13 +496,13 @@ const assistant = {
 			if (msgUpdated) {
 				if (typeof marked === "object") {
 					message.view.inner.innerHTML = marked.parse(message.message);
-				} else {	
+				} else {
 					message.view.inner.innerText = message.message;
 				}
 
 				this.scrollChatBottom();
 			}
-	
+
 			if (delta.audio) {
 				const audio = decodeBase64ToInt16Array(delta.audio);
 				this.player.add16BitPCM(audio);
@@ -530,7 +530,7 @@ const assistant = {
 		this.log("DEBG", `[${id}] Trợ lý đã hoàn thành tin nhắn.`);
 
 		instance.view.classList.remove("processing");
-		instance.view.author.image.src = app.url("/public/images/bard-animated.webp");
+		instance.view.author.image.src = app.public("/images/bard-animated.webp");
 
 		if (this.mode === "text") {
 			this.sendButton.loading = false;
@@ -570,7 +570,7 @@ app.assistant = assistant;
 class WavStreamPlayer {
 	/**
 	 * Creates a new WavStreamPlayer instance.
-	 * 
+	 *
 	 * @param {{sampleRate?: number}} options
 	 */
 	constructor({ sampleRate = 44100 } = {}) {
@@ -679,7 +679,7 @@ class WavStreamPlayer {
 
 	/**
 	 * Connects the audio context and enables output to speakers.
-	 * 
+	 *
 	 * @returns {Promise<void>}
 	 */
 	async connect() {
@@ -701,7 +701,7 @@ class WavStreamPlayer {
 
 	/**
 	 * Starts the audio stream.
-	 * 
+	 *
 	 * @private
 	 */
 	start() {
@@ -720,7 +720,7 @@ class WavStreamPlayer {
 
 	/**
 	 * Adds 16-bit PCM data to the currently playing audio stream.
-	 * 
+	 *
 	 * @param {ArrayBuffer|Int16Array} arrayBuffer
 	 * @returns {Int16Array}
 	 */
@@ -868,7 +868,7 @@ class VoiceRecorder {
 
 				break;
 			}
-			
+
 			case "loudness": {
 				if (this.onLoudnessHandler)
 					this.onLoudnessHandler(data);
@@ -948,7 +948,7 @@ class VoiceRecorder {
 			process(inputs) {
 				if (this.isStopped)
 					return false;
-			
+
 				const input = inputs[0];
 				if (input.length === 0) return true;
 
