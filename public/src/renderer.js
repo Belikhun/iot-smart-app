@@ -1,7 +1,7 @@
 
 /**
  * Render smart switch
- * 
+ *
  * @param	{DeviceFeature}		feature
  */
 function renderSmartSwitch(feature) {
@@ -88,8 +88,8 @@ function renderSmartSwitch(feature) {
 
 /**
  * Function return common functions to use for autocomplete input.
- * 
- * @param	{number}	flag 
+ *
+ * @param	{number}	flag
  * @param	{object}	options
  * @param	{string[]}	options.includeKinds
  * @param	{string[]}	options.excludeKinds
@@ -126,7 +126,7 @@ function featureSearch(flag = FEATURE_FLAG_READ | FEATURE_FLAG_WRITE, {
 					.toLocaleLowerCase();
 
 				for (const token of tokens) {
-					if (!target.includes(token))	
+					if (!target.includes(token))
 						return false;
 				}
 
@@ -224,7 +224,7 @@ class FeatureRenderer {
 
 	/**
 	 * Render content based on feature kind.
-	 * 
+	 *
 	 * @returns	{FeatureContentInstance}
 	 */
 	renderContent() {
@@ -277,9 +277,17 @@ class FeatureRenderer {
 
 			case "FeatureKnob":
 			case "FeatureFanMotor": {
-				const knob = (this.model.kind === "FeatureFanMotor")
-					? new KnobComponent({ defaultAngle: -90 })
-					: new KnobComponent();
+				const options = {
+					width: 132,
+					shift: 18,
+					lineDistEdge: 26,
+					knobSpacing: 26
+				};
+
+				if (this.model.kind === "FeatureFanMotor")
+					options.defaultAngle = -90;
+
+				const knob = new KnobComponent(options);
 
 				let inputHandler = null;
 				let currentValue = 0;
@@ -330,7 +338,10 @@ class FeatureRenderer {
 					minValue: min,
 					maxValue: max,
 					dangerousValue: dangerous,
-					unit
+					unit,
+					width: 120,
+					shift: 16,
+					labelDistBottom: 2
 				});
 
 				let currentValue = 0;
@@ -364,7 +375,10 @@ class FeatureRenderer {
 					minValue: min,
 					maxValue: max,
 					dangerousValue: dangerous,
-					unit
+					unit,
+					width: 120,
+					shift: 16,
+					labelDistBottom: 2
 				});
 
 				let currentValue = 0;
@@ -502,7 +516,7 @@ class FeatureRenderer {
 
 				break;
 			}
-			
+
 			case "FeatureOnOffSensor": {
 				const view = makeTree("div", "feature-onoff-sensor", {
 					icon: { tag: "icon", icon: "circleXMark" },
@@ -530,7 +544,7 @@ class FeatureRenderer {
 
 				break;
 			}
-		
+
 			default: {
 				const view = document.createElement("div");
 				view.innerText = `Chưa hỗ trợ render tính năng ${this.model.kind}`;
@@ -772,7 +786,7 @@ function featureActionSearch(/** @type {() => DeviceFeature} */ getFeature) {
 				value = value.toLocaleLowerCase();
 
 				for (const token of tokens) {
-					if (!value.includes(token))	
+					if (!value.includes(token))
 						return false;
 				}
 
@@ -833,12 +847,12 @@ function renderActionValue(action) {
 				id: `action_value_renderer_${randString(7)}`,
 				label: "Tính năng nguồn",
 				color: "accent",
-	
+
 				...featureSearch(),
-	
+
 				onInput: (value, { trusted }) => {
 					this.deviceFeature = value;
-	
+
 					if (this.view && trusted) {
 						this.render();
 						this.doSave();

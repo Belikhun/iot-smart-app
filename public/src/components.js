@@ -68,7 +68,7 @@ class GaugeComponent {
 			const theta = Math.abs(this.endAngle - this.startAngle);
 			const radius = (this.width + arcWidth) / (2 * Math.sin(theta / 2));
 			this.height = radius * (1 - Math.cos(theta / 2));
-	
+
 			this.centerX = this.width / 2;
 			this.centerY = (this.height / 2) + shift;
 			this.radius = (this.width - arcWidth) / 2;
@@ -135,7 +135,7 @@ class GaugeComponent {
 		const startAngle = (this.startAngle + (startP * (this.endAngle - this.startAngle))) * (Math.PI / 180);
 		const startX = this.centerX + this.radius * Math.cos(startAngle);
 		const startY = this.centerY + this.radius * Math.sin(startAngle);
-		
+
 		const endAngle = this.endAngle * (Math.PI / 180);
 		const endX = this.centerX + this.radius * Math.cos(endAngle);
 		const endY = this.centerY + this.radius * Math.sin(endAngle);
@@ -153,7 +153,7 @@ class GaugeComponent {
 
 	/**
 	 * Set value
-	 * 
+	 *
 	 * @param	{number}	value
 	 */
 	setValue(value) {
@@ -267,7 +267,7 @@ class KnobComponent {
 			const theta = Math.abs(this.endAngle - this.startAngle);
 			const radius = (this.width + arcWidth) / (2 * Math.sin(theta / 2));
 			this.height = radius * (1 - Math.cos(theta / 2));
-	
+
 			this.centerX = this.width / 2;
 			this.centerY = (this.height / 2) + shift;
 			this.radius = (this.width - arcWidth) / 2;
@@ -303,6 +303,34 @@ class KnobComponent {
 			app.root.addEventListener("mouseup", handleMouseUp, { once: true });
 		});
 
+
+		const handleTouchMove = (/** @type {TouchEvent} */ e) => {
+			e.preventDefault();
+			const touch = e.changedTouches[0];
+
+			const distance = mouseDownPoint[1] - touch.clientY;
+			const value = mouseDownValue + (distance / (dragDistance * 2));
+			const newValue = round(Math.max(this.valueClamp[0], Math.min(this.valueClamp[1], value)), 2);
+			this.setValue(newValue, "user");
+		};
+
+		const handleTouchEnd = (/** @type {TouchEvent} */ e) => {
+			app.root.removeEventListener("touchmove", handleTouchMove);
+			app.root.removeEventListener("touchend", handleTouchEnd);
+			this.container.classList.remove("dragging");
+		}
+
+		this.container.addEventListener("touchstart", (e) => {
+			e.preventDefault();
+			const touch = e.changedTouches[0];
+
+			mouseDownPoint = [touch.clientX, touch.clientY];
+			mouseDownValue = this.value;
+			this.container.classList.add("dragging");
+			app.root.addEventListener("touchmove", handleTouchMove);
+			app.root.addEventListener("touchend", handleTouchEnd, { once: true });
+		});
+
 		this.drawBackground();
 
 		this.value = 0;
@@ -330,7 +358,7 @@ class KnobComponent {
 
 	/**
 	 * Set value
-	 * 
+	 *
 	 * @param	{number}				value
 	 * @param	{"user" | "internal"}	source
 	 */
@@ -354,18 +382,18 @@ class KnobComponent {
 			const startAngle = this.defaultAngle * (Math.PI / 180);
 			const startX = this.centerX + this.radius * Math.cos(startAngle);
 			const startY = this.centerY + this.radius * Math.sin(startAngle);
-	
+
 			const endAngle = angle * (Math.PI / 180);
 			const endX = this.centerX + this.radius * Math.cos(endAngle);
 			const endY = this.centerY + this.radius * Math.sin(endAngle);
-	
+
 			const largeArcFlag = (endAngle - startAngle <= Math.PI) ? "0" : "1";
-	
+
 			const pathData = [
 				`M ${startX} ${startY}`,
 				`A ${this.radius} ${this.radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`
 			].join(" ");
-	
+
 			this.svgValue.setAttribute("d", pathData);
 		} else {
 			const startAngle = angle * (Math.PI / 180);
@@ -377,12 +405,12 @@ class KnobComponent {
 			const endY = this.centerY + this.radius * Math.sin(endAngle);
 
 			const largeArcFlag = (endAngle - startAngle <= Math.PI) ? "0" : "1";
-	
+
 			const pathData = [
 				`M ${startX} ${startY}`,
 				`A ${this.radius} ${this.radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`
 			].join(" ");
-	
+
 			this.svgValue.setAttribute("d", pathData);
 		}
 
@@ -404,7 +432,7 @@ class KnobComponent {
 
 	/**
 	 * Handle input value change.
-	 * 
+	 *
 	 * @param	{(value: number) => void}	handler
 	 */
 	onInput(handler) {

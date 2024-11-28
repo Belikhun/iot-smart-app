@@ -552,6 +552,10 @@ class Scrollable {
 		// of our scrolling container.
 		await nextFrameAsync();
 
+		this.current = (this.horizontal)
+			? this.content.scrollLeft
+			: this.content.scrollTop;
+
 		if (this.smooth) {
 			this.animationUpdate({
 				value: this.scrollableExtent,

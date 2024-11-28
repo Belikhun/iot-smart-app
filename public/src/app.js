@@ -452,13 +452,8 @@ const app = {
 
 		init() {
 			this.container = makeTree("div", "screens", {
-				menu: { tag: "div", class: "menu", child: {
-					header: { tag: "div", class: "header", child: {
-						hTitle: { tag: "div", class: "title", text: app.string("pagetitle") }
-					}}
-				}},
-
-				content: { tag: "div", class: "content" }
+				content: { tag: "div", class: "content" },
+				menu: { tag: "div", class: "menu" },
 			});
 
 			app.root.appendChild(this.container);

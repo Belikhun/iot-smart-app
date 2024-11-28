@@ -53,6 +53,9 @@ const assistant = {
 	/** @type {TreeDOM} */
 	button: undefined,
 
+	/** @type {HTMLDivElement} */
+	overlay: undefined,
+
 	/** @type {SQButton} */
 	sendButton: undefined,
 
@@ -145,13 +148,16 @@ const assistant = {
 			}}
 		});
 
+		this.overlay = document.createElement("div");
+		this.overlay.classList.add("assistant-chat-overlay");
+
 		this.button = makeTree("div", "assistant-chat-button", {
 			icon: { tag: "img", src: app.public("/images/bard-mono.svg") },
 			close: { tag: "icon", icon: "close" }
 		});
 
 		new TriangleBackground(this.button, {
-			color: "brown",
+			color: "accent",
 			style: "border",
 			count: 8,
 			hoverable: true
@@ -193,6 +199,7 @@ const assistant = {
 		});
 
 		app.root.appendChild(this.button);
+
 		websocket.on("assistant:message", ({ data }) => this.assistantStartMessage(data));
 		websocket.on("assistant:delta", ({ data }) => this.assistantDelta(data));
 		websocket.on("assistant:commit", ({ data }) => this.assistantCommitMessage(data));
@@ -251,23 +258,36 @@ const assistant = {
 		return true;
 	},
 
-	showPanel() {
+	async showPanel() {
 		if (this.showing)
 			return;
 
-		app.root.appendChild(this.view);
+		app.root.append(this.overlay, this.view);
 		this.button.classList.add("showing");
+
+		await nextFrameAsync();
+		this.overlay.classList.add("show");
+		this.view.classList.add("show");
+
 		this.showing = true;
+
+		await delayAsync(300);
 		this.scrollChatBottom();
 		return this;
 	},
 
-	hidePanel() {
+	async hidePanel() {
 		if (!this.showing)
 			return;
 
-		app.root.removeChild(this.view);
+		this.overlay.classList.remove("show");
+		this.view.classList.remove("show");
 		this.button.classList.remove("showing");
+
+		await delayAsync(300);
+		app.root.removeChild(this.overlay, this.view);
+		app.root.removeChild(this.view);
+
 		this.showing = false;
 		return this;
 	},
@@ -548,13 +568,13 @@ const assistant = {
 
 		this.textbox.value = "";
 		this.textbox.dispatchEvent(new Event("input"));
-		this.textbox.focus();
 
 		this.scrollChatBottom();
 	},
 
 	scrollChatBottom() {
 		clearTimeout(this.scrollDownTask);
+
 		this.scrollDownTask = setTimeout(() => {
 			this.scroll.toBottom();
 		}, 100);
@@ -754,7 +774,7 @@ class WavStreamPlayer {
 class VoiceRecorder {
 	constructor({
 		sampleRate = 44100,
-		silenceThreshold = 10,
+		silenceThreshold = 20,
 		silenceTimeout = 2,
 		voiceFrequencyRange = [85, 300],
 	} = {}) {

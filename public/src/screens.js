@@ -26,12 +26,6 @@ const screens = {
 	/** @type {ScreenGroup} */
 	system: undefined,
 
-	/** @type {ScreenGroup} */
-	automation: undefined,
-
-	/** @type {ScreenGroup} */
-	accounts: undefined,
-
 	locationHash: undefined,
 
 	called: false,
@@ -39,8 +33,6 @@ const screens = {
     init() {
 		this.locationHash = location.hash;
 		this.system = new ScreenGroup("system", app.string("system"));
-		this.automation = new ScreenGroup("automation", "Tự động hóa");
-		this.accounts = new ScreenGroup("accounts", "Tài khoản");
     },
 
 	async activate() {

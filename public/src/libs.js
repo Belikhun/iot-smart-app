@@ -1944,15 +1944,15 @@ class ScreenUtils {
 		if (link) {
 			if (typeof link === "string") {
 				node.href = link;
-	
+
 				if (newTab) {
 					node.target = "_blank";
 					node.rel = "nofollow";
 				}
-	
+
 				return node;
 			}
-	
+
 			node.addEventListener("click", () => link());
 		}
 
@@ -2467,6 +2467,7 @@ class ScreenChild {
 	 * @param   {string}            name
 	 * @param   {object}            options
 	 * @param   {string}            options.title
+	 * @param   {string}            options.icon
 	 * @param   {string}            options.screen
 	 * @param   {boolean}           options.activated
 	 * @param   {boolean}           options.scrollable		Apply scrollable to this panel.
@@ -2475,6 +2476,7 @@ class ScreenChild {
 	 */
 	constructor(group, id, name, {
 		title,
+		icon = "circle",
 		screen,
 		activated = false,
 		scrollable = true,
@@ -2498,9 +2500,7 @@ class ScreenChild {
 		/** @type {"desktop" | "tablet" | "mobile"} */
 		this.screenMode = "desktop";
 
-		this.menu = document.createElement("div");
-		this.menu.classList.add("child");
-		this.menu.innerText = name;
+		this.menu = ScreenUtils.renderIcon(icon);
 		this.menu.id = `menu-child-${id}`;
 
 		this.container = makeTree("div", ["screen", "side-hidden"], {
@@ -2712,7 +2712,7 @@ class ScreenChild {
 			const remSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
 			const alerts = this.container.main.alerts.childNodes;
 			const alertHeight = [...alerts].reduce((value, node) => value + node.clientHeight, 0);
-			const heights = alertHeight + this.container.main.breadcrumbs.clientHeight + (remSize * 3);
+			const heights = alertHeight + (remSize * 3);
 			this.stickyPoint = heights;
 		}
 
