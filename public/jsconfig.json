@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"module": "CommonJS",
+		"target": "ES2020",
+		"strict": false,
+		"rootDir": "./",
+		"baseUrl": "./"
+	},
+
+	"include": [
+		"src/**/*.js",
+		"screens/**/*.js",
+		"public/libs/js/**/*.js",
+		"public/types/*.js"
+	]
+}

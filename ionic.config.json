@@ -1,0 +1,7 @@
+{
+  "name": "smart-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "custom"
+}

@@ -1,0 +1,14 @@
+{
+	"appId": "dev.belikhun.smartApp",
+	"appName": "Smart App",
+	"webDir": "dist",
+	"android": {
+		"package": "dev.belikhun.smartapp",
+		"allowMixedContent": true
+	},
+	"server": {
+		"androidScheme": "http",
+		"allowNavigation": ["*"],
+		"cleartext": true
+	}
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<link rel="stylesheet" href="public/libs/fonts/AlbulaPro/AlbulaPro.css">
+		<link rel="stylesheet" href="public/libs/fonts/FontAwesome/FontAwesome.css">
+
+		<link rel="stylesheet" href="public/libs/css/default.css">
+		<link rel="stylesheet" href="public/libs/css/scrollbar.css">
+		<link rel="stylesheet" href="public/libs/css/button.css">
+		<link rel="stylesheet" href="public/libs/css/switch.css">
+		<link rel="stylesheet" href="public/libs/css/input.css">
+		<link rel="stylesheet" href="public/libs/css/spinner.css">
+		<link rel="stylesheet" href="public/libs/css/progressBar.css">
+		<link rel="stylesheet" href="public/libs/css/textView.css">
+
+		<link rel="stylesheet" href="/public/reinvented-color-wheel/reinvented-color-wheel.min.css">
+
+		<title>Bảng điều khiển - Smart Server</title>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="loadingOverlay show loading">
+				<div class="spinner"></div>
+			</div>
+		</div>
+
+		<script type="module" src="/src/main.js"></script>
+
+		<script src="/public/marked/marked.min.js"></script>
+		<script src="/public/reinvented-color-wheel/reinvented-color-wheel.js"></script>
+
+		<script type="text/javascript" src="public/libs/js/belibrary.js"></script>
+		<script type="text/javascript" src="public/libs/js/errorHandler.js"></script>
+		<script type="text/javascript" src="public/libs/js/scrollable.js"></script>
+		<script type="text/javascript" src="public/libs/js/toast.js"></script>
+
+		<script type="text/javascript" src="src/libs.js"></script>
+		<script type="text/javascript" src="src/utils.js"></script>
+		<script type="text/javascript" src="src/components.js"></script>
+		<script type="text/javascript" src="src/classes.js"></script>
+
+		<script type="text/javascript" src="src/screens.js"></script>
+		<script type="text/javascript" src="src/renderer.js"></script>
+
+		<!-- Application Bootstraper -->
+		<script type="text/javascript" src="src/app.js"></script>
+		<script type="text/javascript" src="src/websocket.js"></script>
+		<script type="text/javascript" src="src/assistant.js"></script>
+		<script type="text/javascript" src="src/data.js"></script>
+
+		<script type="text/javascript">
+			app.init();
+		</script>
+	</body>
+</html>
