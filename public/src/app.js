@@ -147,6 +147,74 @@ const app = {
 		return this.currentScreenMode;
 	},
 
+	alarm: {
+		/** @type {TreeDOM} */
+		view: undefined,
+
+		/** @type {HTMLAudioElement} */
+		audio: undefined,
+
+		started: false,
+
+		task: undefined,
+
+		init() {
+			this.view = makeTree("div", "system-alarm", {
+				icon: { tag: "icon", icon: "exclamation" },
+				text: { tag: "span", text: "Cảnh báo hệ thống được kích hoạt!" }
+			});
+
+			this.audio = new Audio(app.public("/sounds/alarm.mp3"));
+			this.audio.loop = true;
+		},
+
+		start() {
+			if (this.started)
+				return this;
+
+			this.started = true;
+			clearTimeout(this.task);
+			app.root.appendChild(this.view);
+			app.root.classList.add("alarm");
+
+			waitFor(
+				() => (typeof window.setStatusBarStyle === "function"),
+				() => window.setStatusBarStyle("DARK")
+			);
+
+			requestAnimationFrame(() => {
+				this.view.classList.add("show");
+			});
+
+			this.audio.play();
+			return this;
+		},
+
+		stop() {
+			if (!this.started)
+				return this;
+
+			this.started = false;
+			app.root.classList.remove("alarm");
+			this.view.classList.remove("show");
+
+			waitFor(
+				() => (typeof window.setStatusBarStyle === "function"),
+				() => window.setStatusBarStyle("LIGHT")
+			);
+
+			this.audio.pause();
+
+			clearTimeout(this.task);
+			this.task = setTimeout(() => {
+				app.root.removeChild(this.view);
+			}, 300);
+
+			this.audio.currentTime = 0;
+			return this;
+		}
+	},
+
 	auth: {
 		/** @type {TreeDOM} */
 		view: undefined,

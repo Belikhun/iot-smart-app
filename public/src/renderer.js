@@ -166,7 +166,9 @@ class FeatureRenderer {
 			"FeatureHumidity": { icon: "dropletPercent" },
 			"FeatureSensorValue": { icon: "sensor" },
 			"FeatureAlarm": { icon: "siren" },
-			"FeatureFanMotor": { icon: "fan" }
+			"FeatureFanMotor": { icon: "fan" },
+			"FeatureSystemAlert": { icon: "lightEmergencyOn" },
+			"FeatureSystemNotification": { icon: "envelope" },
 		}
 	}
 
@@ -233,7 +235,8 @@ class FeatureRenderer {
 
 		switch (this.model.kind) {
 			case "FeatureButton":
-			case "FeatureOnOffToggle": {
+			case "FeatureOnOffToggle":
+			case "FeatureSystemAlert": {
 				const view = makeTree("div", "feature-button", {
 					handle: { tag: "div", class: "handle" }
 				});
@@ -277,17 +280,9 @@ class FeatureRenderer {
 
 			case "FeatureKnob":
 			case "FeatureFanMotor": {
-				const options = {
-					width: 132,
-					shift: 18,
-					lineDistEdge: 26,
-					knobSpacing: 26
-				};
-
-				if (this.model.kind === "FeatureFanMotor")
-					options.defaultAngle = -90;
-
-				const knob = new KnobComponent(options);
+				const knob = (this.model.kind === "FeatureFanMotor")
+					? new KnobComponent({ defaultAngle: -90 })
+					: new KnobComponent();
 
 				let inputHandler = null;
 				let currentValue = 0;
@@ -338,10 +333,7 @@ class FeatureRenderer {
 					minValue: min,
 					maxValue: max,
 					dangerousValue: dangerous,
-					unit,
-					width: 120,
-					shift: 16,
-					labelDistBottom: 2
+					unit
 				});
 
 				let currentValue = 0;
@@ -375,10 +367,7 @@ class FeatureRenderer {
 					minValue: min,
 					maxValue: max,
 					dangerousValue: dangerous,
-					unit,
-					width: 120,
-					shift: 16,
-					labelDistBottom: 2
+					unit
 				});
 
 				let currentValue = 0;
@@ -539,6 +528,30 @@ class FeatureRenderer {
 
 					get value () {
 						return currentValue;
+					}
+				};
+
+				break;
+			}
+
+			case "FeatureSystemNotification": {
+				const form = new SystemNotificationForm();
+
+				instance = {
+					view: form.view,
+
+					onInput: (handler) => {
+						form.onInput((value) => {
+							handler(value);
+						});
+					},
+
+					set value(value) {
+						form.value = value;
+					},
+
+					get value () {
+						return form.value;
 					}
 				};
 
@@ -740,7 +753,8 @@ const ActionTypes = {
 	setValue: { icon: "equals" },
 	setFromFeature: { icon: "rightLeft" },
 	toggleValue: { icon: "lightSwitch" },
-	alarmValue: { icon: "siren", hidden: true }
+	alarmValue: { icon: "siren", hidden: true },
+	notificationValue: { icon: "envelope", hidden: true }
 };
 
 function featureActionSearch(/** @type {() => DeviceFeature} */ getFeature) {
@@ -761,6 +775,10 @@ function featureActionSearch(/** @type {() => DeviceFeature} */ getFeature) {
 				switch (feature.kind) {
 					case "FeatureAlarm":
 						actions = ["alarmValue"];
+						break;
+
+					case "FeatureSystemNotification":
+						actions = ["notificationValue"];
 						break;
 				}
 			}
@@ -930,6 +948,39 @@ function renderActionValue(action) {
 
 				set disabled(disabled) {
 					// Not supported
+				}
+			};
+		}
+
+		case "notificationValue": {
+			const form = new SystemNotificationForm();
+
+			return {
+				action,
+				view: form.view,
+				input: null,
+
+				onInput: (handler) => {
+					form.onInput((value) => {
+						handler(JSON.stringify(value));
+					});
+				},
+
+				set value(value) {
+					if (!value) {
+						form.value = null;
+						return;
+					}
+
+					form.value = JSON.parse(value);
+				},
+
+				get value() {
+					return JSON.stringify(form.value);
+				},
+
+				set disabled(disabled) {
+					form.disabled = disabled;
 				}
 			};
 		}

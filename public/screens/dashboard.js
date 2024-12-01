@@ -38,7 +38,7 @@ const dashboard = {
 
 		this.updateButton = createButton("", {
 			icon: "reload",
-			color: "blue",
+			color: "accent",
 			onClick: () => this.fetch()
 		});
 
@@ -65,7 +65,7 @@ const dashboard = {
 		);
 
 		this.screen.addAction(this.updateButton);
-		this.screen.addAction(this.createButton);
+		// this.screen.addAction(this.createButton);
 
 		this.screen.onActivate(() => {
 			if (!this.fetched)

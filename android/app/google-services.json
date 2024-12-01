@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "871097817995",
+    "project_id": "smart-app-local",
+    "storage_bucket": "smart-app-local.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:871097817995:android:4d77d6a8190dea6fa92d8e",
+        "android_client_info": {
+          "package_name": "dev.belikhun.smartApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-yXDtBGzfA36t2zBGH8d62GV_l6uDdwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

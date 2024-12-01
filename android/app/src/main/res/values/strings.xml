@@ -4,4 +4,5 @@
     <string name="title_activity_main">Smart App</string>
     <string name="package_name">dev.belikhun.smartApp</string>
     <string name="custom_url_scheme">dev.belikhun.smartApp</string>
+    <string name="alarm_channel_id">System Alarm</string>
 </resources>
